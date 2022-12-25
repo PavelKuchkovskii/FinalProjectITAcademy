@@ -7,4 +7,5 @@ public interface IProduct extends IEssence{
     int getFats();
     int getCarbohydrates();
     int getWeight();
+    double getProteins();
 }

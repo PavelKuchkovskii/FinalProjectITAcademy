@@ -1,9 +1,9 @@
 package org.kucher.itacademyfitness.app.dao.entity;
 
-import org.kucher.itacademyfitness.app.dao.entity.api.IDishComposition;
+import org.kucher.itacademyfitness.app.dao.entity.api.IComposition;
 import org.kucher.itacademyfitness.app.dao.entity.api.IProduct;
 
-public class DishComposition implements IDishComposition {
+public class Composition implements IComposition {
 
     private IProduct product;
     private int weight;

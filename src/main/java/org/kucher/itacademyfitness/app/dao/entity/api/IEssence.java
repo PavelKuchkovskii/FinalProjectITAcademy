@@ -7,7 +7,7 @@ public interface IEssence {
 
     UUID getUuid();
 
-    LocalDateTime dtCreate();
+    LocalDateTime getDtCreate();
 
-    LocalDateTime dtUpdate();
+    LocalDateTime getDtUpdate();
 }

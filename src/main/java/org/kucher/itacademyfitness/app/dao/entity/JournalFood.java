@@ -1,22 +1,21 @@
 package org.kucher.itacademyfitness.app.dao.entity;
 
+import org.kucher.itacademyfitness.app.dao.entity.api.IJournalFood;
 import org.kucher.itacademyfitness.app.dao.entity.api.IProduct;
+import org.kucher.itacademyfitness.app.dao.entity.api.IRecipe;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Product implements IProduct {
+public class JournalFood implements IJournalFood {
 
     private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
-    private String title;
-    private int calories;
-    private int fats;
-    private int carbohydrates;
+    private LocalDateTime dtSupply;
+    private IRecipe recipe;
+    private IProduct product;
     private int weight;
-    private double proteins;
-
 
     @Override
     public UUID getUuid() {
@@ -34,32 +33,22 @@ public class Product implements IProduct {
     }
 
     @Override
-    public String getTitle() {
-        return this.title;
+    public LocalDateTime getDtSupply() {
+        return this.dtSupply;
     }
 
     @Override
-    public int getCalories() {
-        return this.calories;
+    public IRecipe getRecipe() {
+        return this.recipe;
     }
 
     @Override
-    public int getFats() {
-        return this.fats;
-    }
-
-    @Override
-    public int getCarbohydrates() {
-        return this.carbohydrates;
+    public IProduct getProduct() {
+        return this.product;
     }
 
     @Override
     public int getWeight() {
         return this.weight;
-    }
-
-    @Override
-    public double getProteins() {
-        return this.proteins;
     }
 }
