@@ -3,7 +3,7 @@ package org.kucher.itacademyfitness.app.service;
 import org.kucher.itacademyfitness.app.dao.api.IRecipeDao;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
 import org.kucher.itacademyfitness.app.service.api.IRecipeService;
-import org.kucher.itacademyfitness.app.service.builders.RecipeBuilder;
+import org.kucher.itacademyfitness.app.dao.entity.builders.RecipeBuilder;
 import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
 import org.springframework.stereotype.Service;
 
@@ -22,20 +22,23 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public RecipeDTO create(RecipeDTO dto) {
-        dto.setUuid(UUID.randomUUID());
+        dto.setId(UUID.randomUUID());
         dto.setDtCreate(LocalDateTime.now());
         dto.setDtUpdate(dto.getDtCreate());
 
-        Recipe recipe = RecipeBuilder
-                .create()
-                .setUuid(dto.getUuid())
-                .setDtCreate(dto.getDtCreate())
-                .setDtUpdate(dto.getDtUpdate())
-                .setTitle(dto.getTitle())
-                .setComposition(dto.getComposition())
-                .build();
+        if(validate(dto)) {
 
-        dao.save(recipe);
+            Recipe recipe = RecipeBuilder
+                    .create()
+                    .setUuid(dto.getId())
+                    .setDtCreate(dto.getDtCreate())
+                    .setDtUpdate(dto.getDtUpdate())
+                    .setTitle(dto.getTitle())
+                    .setComposition(dto.getComposition())
+                    .build();
+
+            dao.save(recipe);
+        }
 
         return dto;
     }
@@ -58,5 +61,10 @@ public class RecipeService implements IRecipeService {
     @Override
     public void delete(long id, LocalDateTime dtUpdate) {
 
+    }
+
+    @Override
+    public boolean validate(RecipeDTO dto) {
+        return true;
     }
 }

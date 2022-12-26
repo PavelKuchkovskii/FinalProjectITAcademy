@@ -2,25 +2,54 @@ package org.kucher.itacademyfitness.app.dao.entity;
 
 import org.kucher.itacademyfitness.app.dao.entity.api.IProduct;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name = " product")
 public class Product implements IProduct {
 
-    private UUID uuid;
+    @Id
+    private UUID id;
+    @Column(name = "dt_create")
     private LocalDateTime dtCreate;
+    @Column(name = "dt_update")
     private LocalDateTime dtUpdate;
+    @Column(name = "title")
     private String title;
-    private int calories;
-    private int fats;
-    private int carbohydrates;
+    @Column(name = "weight")
     private int weight;
+    @Column(name = "calories")
+    private int calories;
+    @Column(name = "fats")
+    private double fats;
+    @Column(name = "carbohydrates")
+    private double carbohydrates;
+    @Column(name = "proteins")
     private double proteins;
 
+    public Product() {
+    }
+
+    public Product(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, int weight, int calories, double fats, double carbohydrates, double proteins) {
+        this.id = id;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.title = title;
+        this.weight = weight;
+        this.calories = calories;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+        this.proteins = proteins;
+    }
 
     @Override
-    public UUID getUuid() {
-        return this.uuid;
+    public UUID getId() {
+        return this.id;
     }
 
     @Override
@@ -44,12 +73,12 @@ public class Product implements IProduct {
     }
 
     @Override
-    public int getFats() {
+    public double getFats() {
         return this.fats;
     }
 
     @Override
-    public int getCarbohydrates() {
+    public double getCarbohydrates() {
         return this.carbohydrates;
     }
 

@@ -1,25 +1,41 @@
 package org.kucher.itacademyfitness.app.dao.entity;
 
 import org.kucher.itacademyfitness.app.dao.entity.api.IJournalFood;
-import org.kucher.itacademyfitness.app.dao.entity.api.IProduct;
-import org.kucher.itacademyfitness.app.dao.entity.api.IRecipe;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name ="journal_food")
 public class JournalFood implements IJournalFood {
 
-    private UUID uuid;
+    @Id
+    private UUID id;
+    @Column(name = "dt_create")
     private LocalDateTime dtCreate;
+    @Column(name = "dt_update")
     private LocalDateTime dtUpdate;
+    @Column(name = "dt_supply")
     private LocalDateTime dtSupply;
-    private IRecipe recipe;
-    private IProduct product;
+
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @Column(name = "weight")
     private int weight;
 
+    public JournalFood() {
+    }
+
     @Override
-    public UUID getUuid() {
-        return this.uuid;
+    public UUID getId() {
+        return this.id;
     }
 
     @Override
@@ -38,12 +54,12 @@ public class JournalFood implements IJournalFood {
     }
 
     @Override
-    public IRecipe getRecipe() {
+    public Recipe getRecipe() {
         return this.recipe;
     }
 
     @Override
-    public IProduct getProduct() {
+    public Product getProduct() {
         return this.product;
     }
 

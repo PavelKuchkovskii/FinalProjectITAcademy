@@ -9,7 +9,8 @@ public class ItAcademyFitnessApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ItAcademyFitnessApplication.class, args);
 
-
 	}
 
 }
+
+

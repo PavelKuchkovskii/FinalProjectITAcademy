@@ -1,7 +1,8 @@
 package org.kucher.itacademyfitness.app.controller;
 
+import org.kucher.itacademyfitness.app.service.api.IProductService;
 import org.kucher.itacademyfitness.app.service.api.IRecipeService;
-import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
+import org.kucher.itacademyfitness.app.service.dto.ProductDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,21 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/recipe")
-public class RecipeController {
+@RequestMapping("/product")
+public class ProductController {
 
-    private IRecipeService service;
+    private IProductService service;
 
-    public RecipeController(IRecipeService service) {
+    public ProductController(IProductService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> doPost(@RequestBody RecipeDTO dto) {
-        RecipeDTO created = this.service.create(dto);
+    public ResponseEntity<ProductDTO> doPost(@RequestBody ProductDTO dto) {
+        ProductDTO created = this.service.create(dto);
 
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
-
 
 }

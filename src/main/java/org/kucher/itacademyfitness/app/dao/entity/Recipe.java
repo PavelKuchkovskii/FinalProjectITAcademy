@@ -1,25 +1,34 @@
 package org.kucher.itacademyfitness.app.dao.entity;
 
 import org.kucher.itacademyfitness.app.dao.entity.api.IRecipe;
-import org.kucher.itacademyfitness.app.dao.entity.api.IComposition;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "recipe")
 public class Recipe implements IRecipe {
 
-    private UUID uuid;
+    @Id
+    private UUID id;
+    @Column(name = "dt_create")
     private LocalDateTime dtCreate;
+    @Column(name = "dt_update")
     private LocalDateTime dtUpdate;
+    @Column(name = "title")
     private String title;
+
+    @OneToMany
+    @JoinColumn(name = "recipe_id")
     private List<Composition> composition;
 
     public Recipe() {
     }
 
-    public Recipe(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, List<Composition> composition) {
-        this.uuid = uuid;
+    public Recipe(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, List<Composition> composition) {
+        this.id = id;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.title = title;
@@ -27,8 +36,8 @@ public class Recipe implements IRecipe {
     }
 
     @Override
-    public UUID getUuid() {
-        return this.uuid;
+    public UUID getId() {
+        return this.id;
     }
 
     @Override

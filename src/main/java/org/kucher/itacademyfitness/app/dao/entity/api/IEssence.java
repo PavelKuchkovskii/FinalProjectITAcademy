@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface IEssence {
 
-    UUID getUuid();
+    UUID getId();
 
     LocalDateTime getDtCreate();
 

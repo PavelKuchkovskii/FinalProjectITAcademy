@@ -10,5 +10,5 @@ public interface IService <DTO>{
     List<DTO> get();
     DTO update(long id, LocalDateTime dtUpdate, DTO dto);
     void delete(long id, LocalDateTime dtUpdate);
-
+    boolean validate(DTO dto);
 }

@@ -1,4 +1,4 @@
-package org.kucher.itacademyfitness.app.service.builders;
+package org.kucher.itacademyfitness.app.dao.entity.builders;
 
 import org.kucher.itacademyfitness.app.dao.entity.Composition;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
