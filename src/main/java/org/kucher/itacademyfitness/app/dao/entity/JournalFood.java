@@ -33,6 +33,16 @@ public class JournalFood implements IJournalFood {
     public JournalFood() {
     }
 
+    public JournalFood(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, LocalDateTime dtSupply, Recipe recipe, Product product, int weight) {
+        this.id = id;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.dtSupply = dtSupply;
+        this.recipe = recipe;
+        this.product = product;
+        this.weight = weight;
+    }
+
     @Override
     public UUID getId() {
         return this.id;

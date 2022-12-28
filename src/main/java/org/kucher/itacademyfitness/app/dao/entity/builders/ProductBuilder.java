@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class ProductBuilder {
 
-    private UUID uuid;
+    private UUID id;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
     private String title;
@@ -25,8 +25,8 @@ public class ProductBuilder {
         return new ProductBuilder();
     }
 
-    public ProductBuilder setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public ProductBuilder setId(UUID id) {
+        this.id = id;
         return this;
     }
 
@@ -71,6 +71,6 @@ public class ProductBuilder {
     }
 
     public Product build() {
-        return new Product(uuid, dtCreate, dtUpdate, title, weight, calories, fats, carbohydrates, proteins);
+        return new Product(id, dtCreate, dtUpdate, title, weight, calories, fats, carbohydrates, proteins);
     }
 }

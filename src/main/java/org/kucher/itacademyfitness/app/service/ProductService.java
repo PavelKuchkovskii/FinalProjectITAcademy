@@ -5,19 +5,27 @@ import org.kucher.itacademyfitness.app.dao.entity.Product;
 import org.kucher.itacademyfitness.app.dao.entity.builders.ProductBuilder;
 import org.kucher.itacademyfitness.app.service.api.IProductService;
 import org.kucher.itacademyfitness.app.service.dto.ProductDTO;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
 
     private IProductDao dao;
+    private ModelMapper mapper;
 
-    public ProductService(IProductDao dao) {
+    public ProductService(IProductDao dao, ModelMapper mapper) {
         this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override
@@ -30,7 +38,7 @@ public class ProductService implements IProductService {
 
             Product product = ProductBuilder
                     .create()
-                    .setUuid(dto.getId())
+                    .setId(dto.getId())
                     .setDtCreate(dto.getDtCreate())
                     .setDtUpdate(dto.getDtUpdate())
                     .setTitle(dto.getTitle())
@@ -53,8 +61,12 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductDTO> get() {
-        return null;
+    public Page<ProductDTO> get(int page, int itemsPerPage) {
+        Pageable pageable = PageRequest.of(page, itemsPerPage);
+        Page<Product> products = dao.findAll(pageable);
+
+        return new PageImpl<> (products.get().map(this::mapToDTO)
+                .collect(Collectors.toList()), pageable, products.getTotalElements());
     }
 
     @Override
@@ -71,4 +83,16 @@ public class ProductService implements IProductService {
     public boolean validate(ProductDTO productDTO) {
         return true;
     }
+
+    @Override
+    public ProductDTO mapToDTO(Product product) {
+        return mapper.map(product, ProductDTO.class);
+    }
+
+    @Override
+    public Product mapToEntity(ProductDTO entity) {
+        return null;
+    }
+
+
 }

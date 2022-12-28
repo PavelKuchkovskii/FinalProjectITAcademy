@@ -5,6 +5,7 @@ import org.kucher.itacademyfitness.app.dao.entity.Recipe;
 import org.kucher.itacademyfitness.app.service.api.IRecipeService;
 import org.kucher.itacademyfitness.app.dao.entity.builders.RecipeBuilder;
 import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,7 +31,7 @@ public class RecipeService implements IRecipeService {
 
             Recipe recipe = RecipeBuilder
                     .create()
-                    .setUuid(dto.getId())
+                    .setId(dto.getId())
                     .setDtCreate(dto.getDtCreate())
                     .setDtUpdate(dto.getDtUpdate())
                     .setTitle(dto.getTitle())
@@ -49,7 +50,7 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
-    public List<RecipeDTO> get() {
+    public Page<RecipeDTO> get(int page, int itemsPerPage) {
         return null;
     }
 
@@ -66,5 +67,15 @@ public class RecipeService implements IRecipeService {
     @Override
     public boolean validate(RecipeDTO dto) {
         return true;
+    }
+
+    @Override
+    public RecipeDTO mapToDTO(Recipe recipe) {
+        return null;
+    }
+
+    @Override
+    public Recipe mapToEntity(RecipeDTO entity) {
+        return null;
     }
 }

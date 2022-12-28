@@ -1,5 +1,6 @@
 package org.kucher.itacademyfitness.app.dao.entity;
 
+import org.hibernate.annotations.Cascade;
 import org.kucher.itacademyfitness.app.dao.entity.api.IRecipe;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Recipe implements IRecipe {
 
     @OneToMany
     @JoinColumn(name = "recipe_id")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Composition> composition;
 
     public Recipe() {
