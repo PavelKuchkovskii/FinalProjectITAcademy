@@ -2,12 +2,10 @@ package org.kucher.itacademyfitness.app.controller;
 
 import org.kucher.itacademyfitness.app.service.api.IRecipeService;
 import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/recipe")
@@ -17,6 +15,14 @@ public class RecipeController {
 
     public RecipeController(IRecipeService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<RecipeDTO>> doGet(@RequestParam int page, @RequestParam int size) {
+
+        Page<RecipeDTO> recipeDTOS = this.service.get(page, size);
+
+        return new ResponseEntity<>(recipeDTOS, HttpStatus.CREATED);
     }
 
     @PostMapping
