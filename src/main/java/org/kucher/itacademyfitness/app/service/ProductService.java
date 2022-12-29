@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDTO create(ProductDTO dto) {
-        dto.setId(UUID.randomUUID());
+        dto.setUuid(UUID.randomUUID());
         dto.setDtCreate(LocalDateTime.now());
         dto.setDtUpdate(dto.getDtCreate());
 
@@ -37,7 +38,7 @@ public class ProductService implements IProductService {
 
             Product product = ProductBuilder
                     .create()
-                    .setId(dto.getId())
+                    .setUuid(dto.getUuid())
                     .setDtCreate(dto.getDtCreate())
                     .setDtUpdate(dto.getDtUpdate())
                     .setTitle(dto.getTitle())
@@ -55,8 +56,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDTO read(long id) {
-        return null;
+    public ProductDTO read(UUID uuid) {
+        Optional<Product> oProduct = dao.findById(uuid);
+        return oProduct.map(this::mapToDTO).orElse(null);
+
     }
 
     @Override
@@ -69,12 +72,38 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDTO update(long id, LocalDateTime dtUpdate, ProductDTO dto) {
-        return null;
+    public ProductDTO update(UUID uuid, LocalDateTime dtUpdate, ProductDTO dto) {
+
+        ProductDTO productDTO = this.read(uuid);
+        productDTO.setDtUpdate(LocalDateTime.now());
+        productDTO.setTitle(dto.getTitle());
+        productDTO.setWeight(dto.getWeight());
+        productDTO.setCalories(dto.getCalories());
+        productDTO.setFats(dto.getFats());
+        productDTO.setCarbohydrates(dto.getCarbohydrates());
+        productDTO.setProteins(dto.getProteins());
+
+        Product product = ProductBuilder
+                .create()
+                .setUuid(productDTO.getUuid())
+                .setDtCreate(productDTO.getDtCreate())
+                .setDtUpdate(productDTO.getDtUpdate())
+                .setTitle(productDTO.getTitle())
+                .setWeight(productDTO.getWeight())
+                .setCalories(productDTO.getCalories())
+                .setFats(productDTO.getFats())
+                .setCarbohydrates(productDTO.getCarbohydrates())
+                .setProteins(productDTO.getProteins())
+                .build();
+
+        dao.save(product);
+
+        return productDTO;
+
     }
 
     @Override
-    public void delete(long id, LocalDateTime dtUpdate) {
+    public void delete(UUID uuid, LocalDateTime dtUpdate) {
 
     }
 
@@ -86,11 +115,6 @@ public class ProductService implements IProductService {
     @Override
     public ProductDTO mapToDTO(Product product) {
         return mapper.map(product, ProductDTO.class);
-    }
-
-    @Override
-    public Product mapToEntity(ProductDTO entity) {
-        return null;
     }
 
 

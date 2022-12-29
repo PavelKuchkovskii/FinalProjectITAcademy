@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class RecipeBuilder {
 
-    private UUID id;
+    private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
     private String title;
@@ -23,8 +23,8 @@ public class RecipeBuilder {
         return new RecipeBuilder();
     }
 
-    public RecipeBuilder setId(UUID id) {
-        this.id = id;
+    public RecipeBuilder setUuid(UUID uuid) {
+        this.uuid = uuid;
         return this;
     }
 
@@ -49,6 +49,6 @@ public class RecipeBuilder {
     }
 
     public Recipe build() {
-        return new Recipe(id, dtCreate, dtUpdate, title, composition);
+        return new Recipe(uuid, dtCreate, dtUpdate, title, composition);
     }
 }

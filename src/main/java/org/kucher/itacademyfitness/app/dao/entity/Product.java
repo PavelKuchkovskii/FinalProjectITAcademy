@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Product implements IProduct {
 
     @Id
-    private UUID id;
+    private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
     @Column(name = "dt_update")
@@ -35,8 +35,8 @@ public class Product implements IProduct {
     public Product() {
     }
 
-    public Product(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, int weight, int calories, double fats, double carbohydrates, double proteins) {
-        this.id = id;
+    public Product(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, int weight, int calories, double fats, double carbohydrates, double proteins) {
+        this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.title = title;
@@ -48,8 +48,8 @@ public class Product implements IProduct {
     }
 
     @Override
-    public UUID getId() {
-        return this.id;
+    public UUID getUuid() {
+        return this.uuid;
     }
 
     @Override

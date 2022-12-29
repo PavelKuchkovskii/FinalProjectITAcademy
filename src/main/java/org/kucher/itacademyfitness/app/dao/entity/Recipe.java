@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Recipe implements IRecipe {
 
     @Id
-    private UUID id;
+    private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
     @Column(name = "dt_update")
@@ -29,8 +29,8 @@ public class Recipe implements IRecipe {
     public Recipe() {
     }
 
-    public Recipe(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, List<Composition> composition) {
-        this.id = id;
+    public Recipe(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String title, List<Composition> composition) {
+        this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.title = title;
@@ -38,8 +38,8 @@ public class Recipe implements IRecipe {
     }
 
     @Override
-    public UUID getId() {
-        return this.id;
+    public UUID getUuid() {
+        return this.uuid;
     }
 
     @Override

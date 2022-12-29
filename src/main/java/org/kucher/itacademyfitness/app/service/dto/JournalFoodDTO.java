@@ -9,7 +9,7 @@ import java.util.UUID;
 public class JournalFoodDTO {
 
 
-    private UUID id;
+    private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
     private LocalDateTime dtSupply;
@@ -17,13 +17,15 @@ public class JournalFoodDTO {
     private Product product;
     private int weight;
 
-
-    public UUID getId() {
-        return id;
+    public JournalFoodDTO() {
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public LocalDateTime getDtCreate() {

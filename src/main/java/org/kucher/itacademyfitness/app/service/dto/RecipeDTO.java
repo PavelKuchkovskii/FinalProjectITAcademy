@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class RecipeDTO {
 
-    private UUID id;
+    private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
     private String title;
@@ -18,12 +18,12 @@ public class RecipeDTO {
     public RecipeDTO() {
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public LocalDateTime getDtCreate() {

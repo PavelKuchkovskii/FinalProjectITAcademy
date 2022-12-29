@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public RecipeDTO create(RecipeDTO dto) {
-        dto.setId(UUID.randomUUID());
+        dto.setUuid(UUID.randomUUID());
         dto.setDtCreate(LocalDateTime.now());
         dto.setDtUpdate(dto.getDtCreate());
 
@@ -37,7 +38,7 @@ public class RecipeService implements IRecipeService {
 
             Recipe recipe = RecipeBuilder
                     .create()
-                    .setId(dto.getId())
+                    .setUuid(dto.getUuid())
                     .setDtCreate(dto.getDtCreate())
                     .setDtUpdate(dto.getDtUpdate())
                     .setTitle(dto.getTitle())
@@ -51,8 +52,9 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
-    public RecipeDTO read(long id) {
-        return null;
+    public RecipeDTO read(UUID uuid) {
+        Optional<Recipe> oProduct = dao.findById(uuid);
+        return oProduct.map(this::mapToDTO).orElse(null);
     }
 
     @Override
@@ -65,12 +67,28 @@ public class RecipeService implements IRecipeService {
     }
 
     @Override
-    public RecipeDTO update(long id, LocalDateTime dtUpdate, RecipeDTO dto) {
-        return null;
+    public RecipeDTO update(UUID uuid, LocalDateTime dtUpdate, RecipeDTO dto) {
+        RecipeDTO recipeDTO = this.read(uuid);
+        recipeDTO.setDtUpdate(LocalDateTime.now());
+        recipeDTO.setTitle(dto.getTitle());
+        recipeDTO.setComposition(dto.getComposition());
+
+        Recipe recipe = RecipeBuilder
+                .create()
+                .setUuid(recipeDTO.getUuid())
+                .setDtCreate(recipeDTO.getDtCreate())
+                .setDtUpdate(recipeDTO.getDtUpdate())
+                .setTitle(recipeDTO.getTitle())
+                .setComposition(recipeDTO.getComposition())
+                .build();
+
+        dao.save(recipe);
+
+        return recipeDTO;
     }
 
     @Override
-    public void delete(long id, LocalDateTime dtUpdate) {
+    public void delete(UUID uuid, LocalDateTime dtUpdate) {
 
     }
 
@@ -82,10 +100,5 @@ public class RecipeService implements IRecipeService {
     @Override
     public RecipeDTO mapToDTO(Recipe recipe) {
         return mapper.map(recipe, RecipeDTO.class);
-    }
-
-    @Override
-    public Recipe mapToEntity(RecipeDTO entity) {
-        return null;
     }
 }

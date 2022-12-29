@@ -5,25 +5,25 @@ import java.util.UUID;
 
 public class ProductDTO {
 
-    private UUID id;
+    private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
     private String title;
-    private int calories;
-    private int fats;
-    private int carbohydrates;
     private int weight;
+    private int calories;
+    private double fats;
+    private double carbohydrates;
     private double proteins;
 
     public ProductDTO() {
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public LocalDateTime getDtCreate() {
@@ -50,6 +50,14 @@ public class ProductDTO {
         this.title = title;
     }
 
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     public int getCalories() {
         return calories;
     }
@@ -58,28 +66,20 @@ public class ProductDTO {
         this.calories = calories;
     }
 
-    public int getFats() {
+    public double getFats() {
         return fats;
     }
 
-    public void setFats(int fats) {
+    public void setFats(double fats) {
         this.fats = fats;
     }
 
-    public int getCarbohydrates() {
+    public double getCarbohydrates() {
         return carbohydrates;
     }
 
-    public void setCarbohydrates(int carbohydrates) {
+    public void setCarbohydrates(double carbohydrates) {
         this.carbohydrates = carbohydrates;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
     }
 
     public double getProteins() {

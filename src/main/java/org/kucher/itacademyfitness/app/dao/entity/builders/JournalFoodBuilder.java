@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public class JournalFoodBuilder {
 
-    private UUID id;
+    private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
     private LocalDateTime dtSupply;
@@ -25,8 +25,8 @@ public class JournalFoodBuilder {
         return new JournalFoodBuilder();
     }
 
-    public JournalFoodBuilder setId(UUID id) {
-        this.id = id;
+    public JournalFoodBuilder setUuid(UUID uuid) {
+        this.uuid = uuid;
         return this;
     }
 
@@ -61,6 +61,6 @@ public class JournalFoodBuilder {
     }
 
     public JournalFood build() {
-        return new JournalFood(id, dtCreate,dtUpdate,dtSupply, recipe, product, weight);
+        return new JournalFood(uuid, dtCreate,dtUpdate,dtSupply, recipe, product, weight);
     }
 }

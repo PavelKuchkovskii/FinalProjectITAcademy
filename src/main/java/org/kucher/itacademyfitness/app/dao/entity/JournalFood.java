@@ -11,7 +11,7 @@ import java.util.UUID;
 public class JournalFood implements IJournalFood {
 
     @Id
-    private UUID id;
+    private UUID uuid;
     @Column(name = "dt_create")
     private LocalDateTime dtCreate;
     @Column(name = "dt_update")
@@ -33,8 +33,8 @@ public class JournalFood implements IJournalFood {
     public JournalFood() {
     }
 
-    public JournalFood(UUID id, LocalDateTime dtCreate, LocalDateTime dtUpdate, LocalDateTime dtSupply, Recipe recipe, Product product, int weight) {
-        this.id = id;
+    public JournalFood(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, LocalDateTime dtSupply, Recipe recipe, Product product, int weight) {
+        this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
         this.dtSupply = dtSupply;
@@ -44,8 +44,8 @@ public class JournalFood implements IJournalFood {
     }
 
     @Override
-    public UUID getId() {
-        return this.id;
+    public UUID getUuid() {
+        return this.uuid;
     }
 
     @Override
