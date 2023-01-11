@@ -1,9 +1,10 @@
 package org.kucher.itacademyfitness.app.controller.filter;
 
+import org.kucher.itacademyfitness.app.security.entity.UserToJwt;
 import org.kucher.itacademyfitness.app.security.utils.JwtTokenUtil;
-import org.kucher.itacademyfitness.app.service.dto.UserDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -14,11 +15,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -42,11 +46,13 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserDTO user = new UserDTO();
+        UserToJwt user = JwtTokenUtil.getUser(token);
 
-        UsernamePasswordAuthenticationToken
-                authentication = new UsernamePasswordAuthenticationToken(
-                user, null, null);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                user, null,
+                user == null ?
+                        List.of() : Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
+        );
 
         authentication.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request)

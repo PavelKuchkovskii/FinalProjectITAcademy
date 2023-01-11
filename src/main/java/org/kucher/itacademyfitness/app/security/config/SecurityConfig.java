@@ -1,6 +1,5 @@
 package org.kucher.itacademyfitness.app.security.config;
 
-
 import org.kucher.itacademyfitness.app.controller.filter.JwtFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,9 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         http.authorizeRequests()
                 // Our public endpoints
-                .antMatchers("/users/login", "/users/registration").permitAll()
-                .antMatchers("/users").hasAuthority("ADMIN")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 
         // Add JWT token filter
         http.addFilterBefore(

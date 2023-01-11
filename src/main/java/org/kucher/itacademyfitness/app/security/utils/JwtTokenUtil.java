@@ -1,38 +1,41 @@
 package org.kucher.itacademyfitness.app.security.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.jsonwebtoken.*;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.kucher.itacademyfitness.app.config.util.mapper.deserializer.LocalDateTimeDeserializer;
+import org.kucher.itacademyfitness.app.config.util.mapper.serializer.LocalDateTimeSerializer;
+import org.kucher.itacademyfitness.app.security.entity.UserToJwt;
 
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class JwtTokenUtil {
 
-    private static final String jwtSecret = "NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw";
-    private static final String jwtIssuer = "ITAcademy";
 
+    private static final String jwtSecret;
+    private static final String jwtIssuer;
+    private static final ObjectMapper mapper;
 
-    public static String generateAccessToken(UserDetails user) {
-        return generateAccessToken(user.getUsername());
+    static {
+        jwtSecret = "NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw";
+        jwtIssuer = "ITAcademy";
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+        mapper.registerModule(module);
     }
 
-    public static String generateAccessToken(String name) {
-        return Jwts.builder()
-                .setSubject(name)
-                .setIssuer(jwtIssuer)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
-
-    public static String getUsername(String token) {
+    public static UserToJwt getUser(String token) throws JsonProcessingException {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-
-        return claims.getSubject();
+        return mapper.readValue(claims.get("user").toString(), UserToJwt.class);
     }
 
     public static Date getExpirationDate(String token) {

@@ -2,9 +2,19 @@ package org.kucher.itacademyfitness.app.dao.entity;
 
 import org.kucher.itacademyfitness.app.dao.entity.api.IUser;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Embeddable
+@AttributeOverrides({
+        @AttributeOverride( name = "uuid", column = @Column(name = "user_uuid")),
+        @AttributeOverride( name = "dtCreate", column = @Column(name = "dt_create")),
+        @AttributeOverride( name = "dtUpdate", column = @Column(name = "dt_update"))
+})
 public class User implements IUser {
 
     private UUID uuid;
