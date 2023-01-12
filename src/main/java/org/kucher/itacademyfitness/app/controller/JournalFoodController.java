@@ -2,8 +2,6 @@ package org.kucher.itacademyfitness.app.controller;
 
 import org.kucher.itacademyfitness.app.service.api.IJournalFoodService;
 import org.kucher.itacademyfitness.app.service.dto.JournalFoodDTO;
-import org.kucher.itacademyfitness.app.service.dto.ProductDTO;
-import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

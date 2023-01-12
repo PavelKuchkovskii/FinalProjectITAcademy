@@ -21,6 +21,15 @@ public class User implements IUser {
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
 
+    public User() {
+    }
+
+    public User(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate) {
+        this.uuid = uuid;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+    }
+
     @Override
     public UUID getUuid() {
         return this.uuid;
