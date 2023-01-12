@@ -1,6 +1,8 @@
 package org.kucher.itacademyfitness.app.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.kucher.itacademyfitness.app.dao.entity.Product;
+import org.kucher.itacademyfitness.app.dao.entity.Profile;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,8 @@ public class JournalFoodDTO {
     private Recipe recipe;
     private Product product;
     private int weight;
+    @JsonIgnore
+    private Profile profile;
 
     public JournalFoodDTO() {
     }
@@ -74,5 +78,13 @@ public class JournalFoodDTO {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }

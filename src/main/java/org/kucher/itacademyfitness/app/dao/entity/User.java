@@ -12,8 +12,8 @@ import java.util.UUID;
 @Embeddable
 @AttributeOverrides({
         @AttributeOverride( name = "uuid", column = @Column(name = "user_uuid")),
-        @AttributeOverride( name = "dtCreate", column = @Column(name = "dt_create")),
-        @AttributeOverride( name = "dtUpdate", column = @Column(name = "dt_update"))
+        @AttributeOverride( name = "dtCreate", column = @Column(name = "user_dt_create")),
+        @AttributeOverride( name = "dtUpdate", column = @Column(name = "user_dt_update"))
 })
 public class User implements IUser {
 

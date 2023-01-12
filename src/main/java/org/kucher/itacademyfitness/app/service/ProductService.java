@@ -36,18 +36,7 @@ public class ProductService implements IProductService {
 
         if(validate(dto)) {
 
-            Product product = ProductBuilder
-                    .create()
-                    .setUuid(dto.getUuid())
-                    .setDtCreate(dto.getDtCreate())
-                    .setDtUpdate(dto.getDtUpdate())
-                    .setTitle(dto.getTitle())
-                    .setWeight(dto.getWeight())
-                    .setCalories(dto.getCalories())
-                    .setFats(dto.getFats())
-                    .setCarbohydrates(dto.getCarbohydrates())
-                    .setProteins(dto.getProteins())
-                    .build();
+            Product product = mapToEntity(dto);
 
             dao.save(product);
         }
@@ -115,6 +104,22 @@ public class ProductService implements IProductService {
     @Override
     public ProductDTO mapToDTO(Product product) {
         return mapper.map(product, ProductDTO.class);
+    }
+
+    @Override
+    public Product mapToEntity(ProductDTO dto) {
+        return ProductBuilder
+                .create()
+                .setUuid(dto.getUuid())
+                .setDtCreate(dto.getDtCreate())
+                .setDtUpdate(dto.getDtUpdate())
+                .setTitle(dto.getTitle())
+                .setWeight(dto.getWeight())
+                .setCalories(dto.getCalories())
+                .setFats(dto.getFats())
+                .setCarbohydrates(dto.getCarbohydrates())
+                .setProteins(dto.getProteins())
+                .build();
     }
 
 

@@ -14,4 +14,5 @@ public interface IService <DTO, ENTITY>{
     void delete(UUID uuid, LocalDateTime dtUpdate);
     boolean validate(DTO dto);
     DTO mapToDTO(ENTITY entity);
+    ENTITY mapToEntity(DTO dto);
 }

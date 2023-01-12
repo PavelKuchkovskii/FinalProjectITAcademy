@@ -2,6 +2,7 @@ package org.kucher.itacademyfitness.app.dao.entity.builders;
 
 import org.kucher.itacademyfitness.app.dao.entity.JournalFood;
 import org.kucher.itacademyfitness.app.dao.entity.Product;
+import org.kucher.itacademyfitness.app.dao.entity.Profile;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ public class JournalFoodBuilder {
     private Recipe recipe;
     private Product product;
     private int weight;
+
+    private Profile profile;
 
     private JournalFoodBuilder() {
 
@@ -60,7 +63,12 @@ public class JournalFoodBuilder {
         return this;
     }
 
+    public JournalFoodBuilder setProfile(Profile profile) {
+        this.profile = profile;
+        return this;
+    }
+
     public JournalFood build() {
-        return new JournalFood(uuid, dtCreate,dtUpdate,dtSupply, recipe, product, weight);
+        return new JournalFood(uuid, dtCreate,dtUpdate,dtSupply, recipe, product, weight, profile);
     }
 }

@@ -29,7 +29,7 @@ public class ProductController {
 
         Page<ProductDTO> productDTOS = this.service.get(page, size);
 
-        return new ResponseEntity<>(productDTOS, HttpStatus.CREATED);
+        return new ResponseEntity<>(productDTOS, HttpStatus.OK);
     }
 
 
@@ -49,7 +49,7 @@ public class ProductController {
 
         ProductDTO updated = this.service.update(uuid, dtUpdate, dto);
 
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+        return new ResponseEntity<>(updated, HttpStatus.ACCEPTED);
     }
 
 }

@@ -35,6 +35,26 @@ public class Profile implements IProfile {
     @Embedded
     private User user;
 
+    public Profile() {
+    }
+
+    public Profile(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public Profile(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, int height, double weight, LocalDateTime dtBirthday, double target, EActivityType activityType, ESex sex, User user) {
+        this.uuid = uuid;
+        this.dtCreate = dtCreate;
+        this.dtUpdate = dtUpdate;
+        this.height = height;
+        this.weight = weight;
+        this.dtBirthday = dtBirthday;
+        this.target = target;
+        this.activityType = activityType;
+        this.sex = sex;
+        this.user = user;
+    }
+
     @Override
     public UUID getUuid() {
         return uuid;

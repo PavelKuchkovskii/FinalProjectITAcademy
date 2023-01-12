@@ -29,11 +29,15 @@ public class JournalFood implements IJournalFood {
 
     @Column(name = "weight")
     private int weight;
+    @ManyToOne
+    @JoinColumn(name = "profile_uuid")
+    private Profile profile;
+
 
     public JournalFood() {
     }
 
-    public JournalFood(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, LocalDateTime dtSupply, Recipe recipe, Product product, int weight) {
+    public JournalFood(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, LocalDateTime dtSupply, Recipe recipe, Product product, int weight, Profile profile) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -41,6 +45,7 @@ public class JournalFood implements IJournalFood {
         this.recipe = recipe;
         this.product = product;
         this.weight = weight;
+        this.profile = profile;
     }
 
     @Override
@@ -76,5 +81,10 @@ public class JournalFood implements IJournalFood {
     @Override
     public int getWeight() {
         return this.weight;
+    }
+
+    @Override
+    public Profile getProfile() {
+        return this.profile;
     }
 }

@@ -36,14 +36,7 @@ public class RecipeService implements IRecipeService {
 
         if(validate(dto)) {
 
-            Recipe recipe = RecipeBuilder
-                    .create()
-                    .setUuid(dto.getUuid())
-                    .setDtCreate(dto.getDtCreate())
-                    .setDtUpdate(dto.getDtUpdate())
-                    .setTitle(dto.getTitle())
-                    .setComposition(dto.getComposition())
-                    .build();
+            Recipe recipe = mapToEntity(dto);
 
             dao.save(recipe);
         }
@@ -100,5 +93,17 @@ public class RecipeService implements IRecipeService {
     @Override
     public RecipeDTO mapToDTO(Recipe recipe) {
         return mapper.map(recipe, RecipeDTO.class);
+    }
+
+    @Override
+    public Recipe mapToEntity(RecipeDTO dto) {
+        return RecipeBuilder
+                .create()
+                .setUuid(dto.getUuid())
+                .setDtCreate(dto.getDtCreate())
+                .setDtUpdate(dto.getDtUpdate())
+                .setTitle(dto.getTitle())
+                .setComposition(dto.getComposition())
+                .build();
     }
 }
