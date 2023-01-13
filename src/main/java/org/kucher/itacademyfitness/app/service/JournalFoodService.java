@@ -2,6 +2,7 @@ package org.kucher.itacademyfitness.app.service;
 
 import org.kucher.itacademyfitness.app.dao.api.IJournalFoodDao;
 import org.kucher.itacademyfitness.app.dao.entity.JournalFood;
+import org.kucher.itacademyfitness.app.dao.entity.Product;
 import org.kucher.itacademyfitness.app.dao.entity.Profile;
 import org.kucher.itacademyfitness.app.dao.entity.builders.JournalFoodBuilder;
 import org.kucher.itacademyfitness.app.service.api.IJournalFoodService;
@@ -61,15 +62,10 @@ public class JournalFoodService implements IJournalFoodService {
     @Override
     public Page<JournalFoodDTO> get(int page, int itemsPerPage, UUID profileUuid) {
         Pageable pageable = PageRequest.of(page, itemsPerPage);
-        Optional<List<JournalFood>> recipes = dao.findAllByProfile_Uuid(profileUuid);
+        Page<JournalFood> journalFoods = dao.findAllByProfile_Uuid(profileUuid, pageable);
 
-        if(recipes.isPresent()) {
-            return new PageImpl<>(recipes.get().stream().map(this::mapToDTO)
-                    .collect(Collectors.toList()), pageable, recipes.get().size());
-        }
-        else {
-            throw new RuntimeException("Journal food is empty");
-        }
+        return new PageImpl<> (journalFoods.get().map(this::mapToDTO)
+                .collect(Collectors.toList()), pageable, journalFoods.getTotalElements());
     }
 
     @Override
