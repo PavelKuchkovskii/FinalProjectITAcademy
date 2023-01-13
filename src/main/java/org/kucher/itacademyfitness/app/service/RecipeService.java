@@ -1,5 +1,7 @@
 package org.kucher.itacademyfitness.app.service;
 
+import org.kucher.itacademyfitness.app.config.exceptions.api.AlreadyChangedException;
+import org.kucher.itacademyfitness.app.config.exceptions.api.NotFoundException;
 import org.kucher.itacademyfitness.app.dao.api.IRecipeDao;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
 import org.kucher.itacademyfitness.app.service.api.IRecipeService;
@@ -20,8 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeService implements IRecipeService {
 
-    private IRecipeDao dao;
-    private ModelMapper mapper;
+    private final IRecipeDao dao;
+    private final ModelMapper mapper;
 
     public RecipeService(IRecipeDao dao, ModelMapper mapper) {
         this.dao = dao;
@@ -37,7 +39,6 @@ public class RecipeService implements IRecipeService {
         if(validate(dto)) {
 
             Recipe recipe = mapToEntity(dto);
-
             dao.save(recipe);
         }
 
@@ -46,8 +47,14 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public RecipeDTO read(UUID uuid) {
-        Optional<Recipe> oProduct = dao.findById(uuid);
-        return oProduct.map(this::mapToDTO).orElse(null);
+        Optional<Recipe> read = dao.findById(uuid);
+
+        if(read.isPresent()) {
+            return read.map(this::mapToDTO).orElse(null);
+        }
+        else {
+            throw new NotFoundException();
+        }
     }
 
     @Override
@@ -61,23 +68,22 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public RecipeDTO update(UUID uuid, LocalDateTime dtUpdate, RecipeDTO dto) {
-        RecipeDTO recipeDTO = this.read(uuid);
-        recipeDTO.setDtUpdate(LocalDateTime.now());
-        recipeDTO.setTitle(dto.getTitle());
-        recipeDTO.setComposition(dto.getComposition());
+        RecipeDTO read = this.read(uuid);
 
-        Recipe recipe = RecipeBuilder
-                .create()
-                .setUuid(recipeDTO.getUuid())
-                .setDtCreate(recipeDTO.getDtCreate())
-                .setDtUpdate(recipeDTO.getDtUpdate())
-                .setTitle(recipeDTO.getTitle())
-                .setComposition(recipeDTO.getComposition())
-                .build();
+        if(read.getDtUpdate().isEqual(dtUpdate)) {
+            read.setDtUpdate(LocalDateTime.now());
+            read.setTitle(dto.getTitle());
+            read.setComposition(dto.getComposition());
 
-        dao.save(recipe);
-
-        return recipeDTO;
+            if(validate(read)) {
+                Recipe recipe = mapToEntity(read);
+                dao.save(recipe);
+            }
+            return read;
+        }
+        else {
+            throw new AlreadyChangedException();
+        }
     }
 
     @Override
@@ -87,6 +93,16 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public boolean validate(RecipeDTO dto) {
+        if(dto.getUuid() == null) {
+            throw new IllegalArgumentException("Uuid cannot be null");
+        }
+        else if(dto.getDtCreate() == null){
+            throw new IllegalArgumentException("Date create cannot be null");
+        }
+        else if(dto.getDtUpdate()== null){
+            throw new IllegalArgumentException("Date update cannot be null");
+        }
+
         return true;
     }
 

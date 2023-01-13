@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -26,7 +27,7 @@ public class ProfileController {
     }
 
     @PostMapping
-    public ResponseEntity<ProfileDTO> doPost(@RequestBody ProfileDTO dto) {
+    public ResponseEntity<ProfileDTO> doPost(@Valid @RequestBody ProfileDTO dto) {
         ProfileDTO created = this.service.create(dto);
 
         return new ResponseEntity<>(created, HttpStatus.CREATED);

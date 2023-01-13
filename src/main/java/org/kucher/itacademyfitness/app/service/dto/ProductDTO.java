@@ -1,5 +1,7 @@
 package org.kucher.itacademyfitness.app.service.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -8,11 +10,18 @@ public class ProductDTO {
     private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
+
+    @NotBlank(message = "Title cannot be blank")
     private String title;
+    @Min(value = 1, message = "Weight cannot be null")
     private int weight;
+    @Min(value = 1, message = "Calories cannot be null")
     private int calories;
+    @Min(value = 1, message = "Fats cannot be null")
     private double fats;
+    @Min(value = 1, message = "Carbohydrates cannot be null")
     private double carbohydrates;
+    @Min(value = 1, message = "Proteins cannot be null")
     private double proteins;
 
     public ProductDTO() {

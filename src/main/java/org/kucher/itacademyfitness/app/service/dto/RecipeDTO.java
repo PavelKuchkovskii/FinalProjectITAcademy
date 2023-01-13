@@ -3,6 +3,10 @@ package org.kucher.itacademyfitness.app.service.dto;
 
 import org.kucher.itacademyfitness.app.dao.entity.Composition;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +16,12 @@ public class RecipeDTO {
     private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
+    @NotBlank(message = "Title cannot be blank")
     private String title;
+
+    @NotNull(message = "Composition cannot be null")
+    @NotEmpty(message = "Composition cannot be empty")
+    @Valid
     private List<Composition> composition;
 
     public RecipeDTO() {

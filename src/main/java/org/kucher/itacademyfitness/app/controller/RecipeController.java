@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -33,7 +34,7 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity<RecipeDTO> doPost(@RequestBody RecipeDTO dto) {
+    public ResponseEntity<RecipeDTO> doPost(@Valid @RequestBody RecipeDTO dto) {
         RecipeDTO created = this.service.create(dto);
 
         return new ResponseEntity<>(created, HttpStatus.CREATED);
@@ -42,7 +43,7 @@ public class RecipeController {
     @PutMapping("/{uuid}/dt_update/{dt_update}")
     public ResponseEntity<RecipeDTO> doPut(@PathVariable("uuid") UUID uuid,
                                             @PathVariable("dt_update") String dt_update,
-                                            @RequestBody RecipeDTO dto) {
+                                            @Valid @RequestBody RecipeDTO dto) {
 
         LocalDateTime dtUpdate = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(dt_update)), ZoneId.of("UTC"));
 

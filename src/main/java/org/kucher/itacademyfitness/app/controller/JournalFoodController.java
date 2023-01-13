@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +31,7 @@ public class JournalFoodController {
 
     @PostMapping("/{uuid_profile}/journal/food")
     public ResponseEntity<JournalFoodDTO> doPost(@PathVariable("uuid_profile") UUID uuid,
-                                                @RequestBody JournalFoodDTO dto) {
+                                                 @Valid @RequestBody JournalFoodDTO dto) {
         JournalFoodDTO created = this.service.create(dto, uuid);
 
         return new ResponseEntity<>(created, HttpStatus.CREATED);

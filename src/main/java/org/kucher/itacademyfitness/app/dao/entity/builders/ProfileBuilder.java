@@ -6,6 +6,7 @@ import org.kucher.itacademyfitness.app.dao.entity.enums.EActivityType;
 import org.kucher.itacademyfitness.app.dao.entity.enums.ESex;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 public class ProfileBuilder {
@@ -15,7 +16,7 @@ public class ProfileBuilder {
     private LocalDateTime dtUpdate;
     private int height;
     private double weight;
-    private LocalDateTime dtBirthday;
+    private Date dtBirthday;
     private double target;
     private EActivityType activityType;
     private ESex sex;
@@ -54,7 +55,7 @@ public class ProfileBuilder {
         return this;
     }
 
-    public ProfileBuilder setDtBirthday(LocalDateTime dtBirthday) {
+    public ProfileBuilder setDtBirthday(Date dtBirthday) {
         this.dtBirthday = dtBirthday;
         return this;
     }

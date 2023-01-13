@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,6 +24,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class ProfileService implements IProfileService {
 
     private final IProfileDao dao;
@@ -34,10 +36,13 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
+    @Transactional
     public ProfileDTO create(ProfileDTO dto) {
         dto.setUuid(UUID.randomUUID());
         dto.setDtCreate(LocalDateTime.now());
         dto.setDtUpdate(dto.getDtCreate());
+
+        //USER HOLDER!!!
 
         //Get user from Security context
         UserToJwt userToJwt = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -57,6 +62,7 @@ public class ProfileService implements IProfileService {
     @Override
     public ProfileDTO read(UUID uuid) {
         Optional<Profile> profile = dao.findById(uuid);
+
         if(profile.isPresent()) {
             return this.mapToDTO(profile.get());
         }
@@ -75,6 +81,7 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
+    @Transactional
     public ProfileDTO update(UUID uuid, LocalDateTime dtUpdate, ProfileDTO dto) {
         ProfileDTO read = read(uuid);
 
@@ -89,7 +96,6 @@ public class ProfileService implements IProfileService {
 
             if(validate(read)) {
                 Profile profile = this.mapToEntity(read);
-
                 dao.save(profile);
             }
         }
@@ -101,6 +107,7 @@ public class ProfileService implements IProfileService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID uuid, LocalDateTime dtUpdate) {
         ProfileDTO read = read(uuid);
         if(dtUpdate.isEqual(read.getDtUpdate())) {
@@ -113,6 +120,19 @@ public class ProfileService implements IProfileService {
 
     @Override
     public boolean validate(ProfileDTO dto) {
+        if(dto.getUuid() == null) {
+            throw new IllegalArgumentException("Uuid cannot be null");
+        }
+        else if(dto.getDtCreate() == null){
+            throw new IllegalArgumentException("Date create cannot be null");
+        }
+        else if(dto.getDtUpdate()== null){
+            throw new IllegalArgumentException("Date update cannot be null");
+        }
+        else if(dto.getUser() == null || dto.getUser().getUuid() == null || dto.getUser().getDtCreate() == null || dto.getUser().getDtUpdate() == null) {
+            throw new IllegalArgumentException("Something wrong with user");
+        }
+
         return true;
     }
 

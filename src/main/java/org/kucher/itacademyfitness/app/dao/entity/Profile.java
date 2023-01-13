@@ -4,11 +4,9 @@ import org.kucher.itacademyfitness.app.dao.entity.api.IProfile;
 import org.kucher.itacademyfitness.app.dao.entity.enums.EActivityType;
 import org.kucher.itacademyfitness.app.dao.entity.enums.ESex;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -25,12 +23,14 @@ public class Profile implements IProfile {
     @Column(name = "weight")
     private double weight;
     @Column(name = "dt_birthday")
-    private LocalDateTime dtBirthday;
+    private Date dtBirthday;
     @Column(name = "target")
     private double target;
     @Column(name = "activity_type")
+    @Enumerated(EnumType.STRING)
     private EActivityType activityType;
     @Column(name = "sex")
+    @Enumerated(EnumType.STRING)
     private ESex sex;
     @Embedded
     private User user;
@@ -42,7 +42,7 @@ public class Profile implements IProfile {
         this.uuid = uuid;
     }
 
-    public Profile(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, int height, double weight, LocalDateTime dtBirthday, double target, EActivityType activityType, ESex sex, User user) {
+    public Profile(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, int height, double weight, Date dtBirthday, double target, EActivityType activityType, ESex sex, User user) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
@@ -81,7 +81,7 @@ public class Profile implements IProfile {
     }
 
     @Override
-    public LocalDateTime getDtBirthday() {
+    public Date getDtBirthday() {
         return dtBirthday;
     }
 

@@ -1,10 +1,14 @@
 package org.kucher.itacademyfitness.app.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kucher.itacademyfitness.app.dao.entity.User;
 import org.kucher.itacademyfitness.app.dao.entity.enums.EActivityType;
 import org.kucher.itacademyfitness.app.dao.entity.enums.ESex;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 public class ProfileDTO {
@@ -12,11 +16,21 @@ public class ProfileDTO {
     private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
+
+    @Min(value = 1, message = "Height cannot be null")
     private int height;
+    @Min(value = 1, message = "Weight cannot be null")
     private double weight;
-    private LocalDateTime dtBirthday;
+
+    @NotNull(message = "Birthday date cannot be null")
+    @JsonProperty("dt_birthday")
+    private Date dtBirthday;
+    @Min(value = 1, message = "Target cannot be null")
     private double target;
+    @NotNull(message = "ActivityType cannot be null")
+    @JsonProperty("activity_type")
     private EActivityType activityType;
+    @NotNull(message = "Sex cannot be null")
     private ESex sex;
     private User user;
 
@@ -60,11 +74,11 @@ public class ProfileDTO {
         this.weight = weight;
     }
 
-    public LocalDateTime getDtBirthday() {
+    public Date getDtBirthday() {
         return dtBirthday;
     }
 
-    public void setDtBirthday(LocalDateTime dtBirthday) {
+    public void setDtBirthday(Date dtBirthday) {
         this.dtBirthday = dtBirthday;
     }
 

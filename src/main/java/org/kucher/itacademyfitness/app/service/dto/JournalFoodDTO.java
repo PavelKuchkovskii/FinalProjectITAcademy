@@ -5,6 +5,8 @@ import org.kucher.itacademyfitness.app.dao.entity.Product;
 import org.kucher.itacademyfitness.app.dao.entity.Profile;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,9 +16,12 @@ public class JournalFoodDTO {
     private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
+
+    @NotNull(message = "Supply date cannot be null")
     private LocalDateTime dtSupply;
     private Recipe recipe;
     private Product product;
+    @Min(value = 1, message = "Weight cannot be null")
     private int weight;
     @JsonIgnore
     private Profile profile;

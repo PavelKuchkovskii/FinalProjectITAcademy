@@ -3,6 +3,9 @@ package org.kucher.itacademyfitness.app.dao.entity;
 import org.kucher.itacademyfitness.app.dao.entity.api.IComposition;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "composition")
 public class Composition implements IComposition {
@@ -10,10 +13,12 @@ public class Composition implements IComposition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotNull(message = "Product cannot be null")
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Min(value = 1, message = "Weight cannot be null")
     @Column(name = "weight")
     private int weight;
 
