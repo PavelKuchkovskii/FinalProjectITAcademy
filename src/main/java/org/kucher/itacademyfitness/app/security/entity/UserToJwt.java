@@ -8,18 +8,22 @@ public class UserToJwt {
     private UUID uuid;
     private LocalDateTime dtCreate;
     private LocalDateTime dtUpdate;
+    private String mail;
     private String nick;
     private EUserRole role;
+    private EUserStatus status;
 
     public UserToJwt() {
     }
 
-    public UserToJwt(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String nick, EUserRole role) {
+    public UserToJwt(UUID uuid, LocalDateTime dtCreate, LocalDateTime dtUpdate, String mail, String nick, EUserRole role, EUserStatus status) {
         this.uuid = uuid;
         this.dtCreate = dtCreate;
         this.dtUpdate = dtUpdate;
+        this.mail = mail;
         this.nick = nick;
         this.role = role;
+        this.status = status;
     }
 
     public UUID getUuid() {
@@ -60,5 +64,21 @@ public class UserToJwt {
 
     public void setRole(EUserRole role) {
         this.role = role;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public EUserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EUserStatus status) {
+        this.status = status;
     }
 }
