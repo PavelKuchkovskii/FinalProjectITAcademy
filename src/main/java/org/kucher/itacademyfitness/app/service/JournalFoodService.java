@@ -1,10 +1,15 @@
 package org.kucher.itacademyfitness.app.service;
 
+import org.kucher.itacademyfitness.app.audit.AuditService;
+import org.kucher.itacademyfitness.app.audit.dto.AuditDTO;
+import org.kucher.itacademyfitness.app.audit.dto.enums.EEssenceType;
 import org.kucher.itacademyfitness.app.config.exceptions.api.AlreadyChangedException;
 import org.kucher.itacademyfitness.app.config.exceptions.api.NotFoundException;
 import org.kucher.itacademyfitness.app.dao.api.IJournalFoodDao;
 import org.kucher.itacademyfitness.app.dao.entity.JournalFood;
+import org.kucher.itacademyfitness.app.dao.entity.User;
 import org.kucher.itacademyfitness.app.dao.entity.builders.JournalFoodBuilder;
+import org.kucher.itacademyfitness.app.security.entity.UserToJwt;
 import org.kucher.itacademyfitness.app.service.api.IJournalFoodService;
 import org.kucher.itacademyfitness.app.service.api.IProductService;
 import org.kucher.itacademyfitness.app.service.api.IProfileService;
@@ -13,17 +18,16 @@ import org.kucher.itacademyfitness.app.service.dto.JournalFoodDTO;
 import org.kucher.itacademyfitness.app.service.dto.ProductDTO;
 import org.kucher.itacademyfitness.app.service.dto.ProfileDTO;
 import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
-import org.kucher.itacademyfitness.app.service.dto.reports.Report;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,13 +40,15 @@ public class JournalFoodService implements IJournalFoodService {
     private final IProfileService profileService;
     private final IProductService productService;
     private final IRecipeService recipeService;
+    private final AuditService auditService;
     private final ModelMapper mapper;
 
-    public JournalFoodService(IJournalFoodDao dao, IProfileService profileService, IProductService productService, IRecipeService recipeService, ModelMapper mapper) {
+    public JournalFoodService(IJournalFoodDao dao, IProfileService profileService, IProductService productService, IRecipeService recipeService, AuditService auditService, ModelMapper mapper) {
         this.dao = dao;
         this.profileService = profileService;
         this.productService = productService;
         this.recipeService = recipeService;
+        this.auditService = auditService;
         this.mapper = mapper;
     }
 
@@ -67,6 +73,16 @@ public class JournalFoodService implements IJournalFoodService {
 
             JournalFood journalFood = mapToEntity(dto);
             dao.save(journalFood);
+
+            //Create audit
+            AuditDTO audit = new AuditDTO();
+            UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            audit.setUser(user);
+            audit.setText("Create Journal Food");
+            audit.setType(EEssenceType.JOURNAL_FOOD);
+            audit.setId(dto.getUuid().toString());
+
+            auditService.createAudit(audit);
         }
 
         return dto;
@@ -125,6 +141,16 @@ public class JournalFoodService implements IJournalFoodService {
             if(validate(read)) {
                 JournalFood journalFood = mapToEntity(read);
                 dao.save(journalFood);
+
+                //Create audit
+                AuditDTO audit = new AuditDTO();
+                UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                audit.setUser(user);
+                audit.setText("Update Journal Food");
+                audit.setType(EEssenceType.JOURNAL_FOOD);
+                audit.setId(dto.getUuid().toString());
+
+                auditService.createAudit(audit);
             }
 
             return read;

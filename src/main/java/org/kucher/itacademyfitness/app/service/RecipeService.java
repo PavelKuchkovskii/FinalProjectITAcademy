@@ -1,9 +1,13 @@
 package org.kucher.itacademyfitness.app.service;
 
+import org.kucher.itacademyfitness.app.audit.AuditService;
+import org.kucher.itacademyfitness.app.audit.dto.AuditDTO;
+import org.kucher.itacademyfitness.app.audit.dto.enums.EEssenceType;
 import org.kucher.itacademyfitness.app.config.exceptions.api.AlreadyChangedException;
 import org.kucher.itacademyfitness.app.config.exceptions.api.NotFoundException;
 import org.kucher.itacademyfitness.app.dao.api.IRecipeDao;
 import org.kucher.itacademyfitness.app.dao.entity.Recipe;
+import org.kucher.itacademyfitness.app.security.entity.UserToJwt;
 import org.kucher.itacademyfitness.app.service.api.IRecipeService;
 import org.kucher.itacademyfitness.app.dao.entity.builders.RecipeBuilder;
 import org.kucher.itacademyfitness.app.service.dto.RecipeDTO;
@@ -12,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,10 +29,12 @@ public class RecipeService implements IRecipeService {
 
     private final IRecipeDao dao;
     private final ModelMapper mapper;
+    private final AuditService auditService;
 
-    public RecipeService(IRecipeDao dao, ModelMapper mapper) {
+    public RecipeService(IRecipeDao dao, ModelMapper mapper, AuditService auditService) {
         this.dao = dao;
         this.mapper = mapper;
+        this.auditService = auditService;
     }
 
     @Override
@@ -40,6 +47,16 @@ public class RecipeService implements IRecipeService {
 
             Recipe recipe = mapToEntity(dto);
             dao.save(recipe);
+
+            //Create audit
+            AuditDTO audit = new AuditDTO();
+            UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            audit.setUser(user);
+            audit.setText("Create Recipe");
+            audit.setType(EEssenceType.RECIPE);
+            audit.setId(dto.getUuid().toString());
+
+            auditService.createAudit(audit);
         }
 
         return dto;
@@ -78,6 +95,16 @@ public class RecipeService implements IRecipeService {
             if(validate(read)) {
                 Recipe recipe = mapToEntity(read);
                 dao.save(recipe);
+
+                //Create audit
+                AuditDTO audit = new AuditDTO();
+                UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                audit.setUser(user);
+                audit.setText("Update Recipe");
+                audit.setType(EEssenceType.RECIPE);
+                audit.setId(dto.getUuid().toString());
+
+                auditService.createAudit(audit);
             }
             return read;
         }

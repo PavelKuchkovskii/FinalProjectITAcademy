@@ -1,5 +1,8 @@
 package org.kucher.itacademyfitness.app.service;
 
+import org.kucher.itacademyfitness.app.audit.AuditService;
+import org.kucher.itacademyfitness.app.audit.dto.AuditDTO;
+import org.kucher.itacademyfitness.app.audit.dto.enums.EEssenceType;
 import org.kucher.itacademyfitness.app.config.exceptions.api.AlreadyChangedException;
 import org.kucher.itacademyfitness.app.config.exceptions.api.NotFoundException;
 import org.kucher.itacademyfitness.app.dao.api.IProfileDao;
@@ -29,10 +32,12 @@ public class ProfileService implements IProfileService {
 
     private final IProfileDao dao;
     private final ModelMapper mapper;
+    private final AuditService auditService;
 
-    public ProfileService(IProfileDao dao, ModelMapper mapper) {
+    public ProfileService(IProfileDao dao, ModelMapper mapper, AuditService auditService) {
         this.dao = dao;
         this.mapper = mapper;
+        this.auditService = auditService;
     }
 
     @Override
@@ -54,6 +59,15 @@ public class ProfileService implements IProfileService {
         if(validate(dto)) {
             Profile profile = mapToEntity(dto);
             dao.save(profile);
+
+            //Create audit
+            AuditDTO audit = new AuditDTO();
+            audit.setUser(userToJwt);
+            audit.setText("Create Profile");
+            audit.setType(EEssenceType.PROFILE);
+            audit.setId(dto.getUuid().toString());
+
+            auditService.createAudit(audit);
         }
 
         return dto;
@@ -97,6 +111,17 @@ public class ProfileService implements IProfileService {
             if(validate(read)) {
                 Profile profile = this.mapToEntity(read);
                 dao.save(profile);
+
+                //Create audit
+                AuditDTO audit = new AuditDTO();
+                UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                audit.setUser(user);
+                audit.setText("Update Profile");
+                audit.setType(EEssenceType.PROFILE);
+                audit.setId(dto.getUuid().toString());
+
+                auditService.createAudit(audit);
+
             }
         }
         else {
@@ -112,6 +137,16 @@ public class ProfileService implements IProfileService {
         ProfileDTO read = read(uuid);
         if(dtUpdate.isEqual(read.getDtUpdate())) {
             dao.delete(mapToEntity(read));
+
+            //Create audit
+            AuditDTO audit = new AuditDTO();
+            UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            audit.setUser(user);
+            audit.setText("Delete Profile");
+            audit.setType(EEssenceType.PROFILE);
+            audit.setId(read.getUuid().toString());
+
+            auditService.createAudit(audit);
         }
         else {
             throw new AlreadyChangedException();

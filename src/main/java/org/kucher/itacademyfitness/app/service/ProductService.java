@@ -1,10 +1,14 @@
 package org.kucher.itacademyfitness.app.service;
 
+import org.kucher.itacademyfitness.app.audit.AuditService;
+import org.kucher.itacademyfitness.app.audit.dto.AuditDTO;
+import org.kucher.itacademyfitness.app.audit.dto.enums.EEssenceType;
 import org.kucher.itacademyfitness.app.config.exceptions.api.AlreadyChangedException;
 import org.kucher.itacademyfitness.app.config.exceptions.api.NotFoundException;
 import org.kucher.itacademyfitness.app.dao.api.IProductDao;
 import org.kucher.itacademyfitness.app.dao.entity.Product;
 import org.kucher.itacademyfitness.app.dao.entity.builders.ProductBuilder;
+import org.kucher.itacademyfitness.app.security.entity.UserToJwt;
 import org.kucher.itacademyfitness.app.service.api.IProductService;
 import org.kucher.itacademyfitness.app.service.dto.ProductDTO;
 import org.modelmapper.ModelMapper;
@@ -12,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +31,12 @@ public class ProductService implements IProductService {
 
     private final IProductDao dao;
     private final ModelMapper mapper;
+    private final AuditService auditService;
 
-    public ProductService(IProductDao dao, ModelMapper mapper) {
+    public ProductService(IProductDao dao, ModelMapper mapper, AuditService auditService) {
         this.dao = dao;
         this.mapper = mapper;
+        this.auditService = auditService;
     }
 
     @Override
@@ -43,6 +50,16 @@ public class ProductService implements IProductService {
 
             Product product = mapToEntity(dto);
             dao.save(product);
+
+            //Create audit
+            AuditDTO audit = new AuditDTO();
+            UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            audit.setUser(user);
+            audit.setText("Create Product");
+            audit.setType(EEssenceType.PRODUCT);
+            audit.setId(dto.getUuid().toString());
+
+            auditService.createAudit(audit);
         }
 
         return dto;
@@ -88,6 +105,16 @@ public class ProductService implements IProductService {
             if(validate(read)) {
                 Product product = mapToEntity(read);
                 dao.save(product);
+
+                //Create audit
+                AuditDTO audit = new AuditDTO();
+                UserToJwt user = (UserToJwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                audit.setUser(user);
+                audit.setText("Update Product");
+                audit.setType(EEssenceType.PRODUCT);
+                audit.setId(dto.getUuid().toString());
+
+                auditService.createAudit(audit);
             }
 
             return read;
