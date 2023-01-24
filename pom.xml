@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.kucher</groupId>
-	<artifactId>itacademyfitness</artifactId>
+	<artifactId>productservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>itacademyfitness</name>
+	<name>productservice</name>
 	<description>Final project</description>
 	<properties>
 		<java.version>11</java.version>
