@@ -37,10 +37,6 @@ public class JournalFoodController {
     @PostMapping("/journal/food")
     public ResponseEntity<List<JournalFoodDTO>> doGetReport(@RequestBody @Valid Report report) {
 
-        System.out.println(report.getUser().getUuid());
-        System.out.println(report.getParam().getFrom());
-        System.out.println(report.getParam().getTo());
-
         List<JournalFoodDTO> journalFoodDTOS = this.reportService.get(report);
 
         return new ResponseEntity<>(journalFoodDTOS, HttpStatus.CREATED);

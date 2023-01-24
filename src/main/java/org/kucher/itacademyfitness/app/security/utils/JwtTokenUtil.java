@@ -5,12 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.jsonwebtoken.*;
+import org.kucher.itacademyfitness.app.config.exceptions.api.JwtTokenGenerationException;
 import org.kucher.itacademyfitness.app.config.util.mapper.deserializer.LocalDateTimeDeserializer;
 import org.kucher.itacademyfitness.app.config.util.mapper.serializer.LocalDateTimeSerializer;
 import org.kucher.itacademyfitness.app.security.entity.UserToJwt;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class JwtTokenUtil {
 
@@ -36,6 +40,25 @@ public class JwtTokenUtil {
                 .parseClaimsJws(token)
                 .getBody();
         return mapper.readValue(claims.get("user").toString(), UserToJwt.class);
+    }
+
+    public static String generateAccessToken(UserToJwt user) {
+        Map<String, Object> map = new HashMap<>();
+
+        try {
+            map.put("user", mapper.writeValueAsString(user));
+        } catch (JsonProcessingException e) {
+            throw new JwtTokenGenerationException();
+        }
+
+
+        return Jwts.builder()
+                .setClaims(map)
+                .setIssuer(jwtIssuer)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
     }
 
     public static Date getExpirationDate(String token) {
